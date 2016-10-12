@@ -21,9 +21,20 @@
         </div>
         <div class="copyright">&copy; zhgl</div>
       </header>
-      <main class="page-body"></main>
+      <main class="page-body">
+        <div class="page-content" v-html="content"></div>
+      </main>
     </div>
-    <script src="https://cdn.bootcss.com/vue/2.0.1/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.0.1/vue.js"></script>
+    <script src="https://cdn.bootcss.com/vue-router/2.0.0/vue-router.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue-resource/1.0.3/vue-resource.min.js"></script>
     <script src="./js/index.js"></script>
+    <script>
+      Vue.http.get('./index.html').then(function(res){
+        console.log(res);
+      },function(err){
+        console.error(err)
+      });
+    </script>
   </body>
 </html>

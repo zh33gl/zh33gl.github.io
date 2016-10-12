@@ -27,13 +27,14 @@ const categories = [{
 let vm = new Vue({
 	el: '#app',
 	data: {
-		categories: categories
+		categories: categories,
+		content: ''
 	},
 	methods: {
 		openCategory: function(e){
 			let target = e.target,
 				href = target.dataset.href;
-			console.log(e, href)
+			vm.content = href;
 		}
 	}
 });

@@ -62,3 +62,11 @@
 	background: #475669;
 	border-left-color: #58B7FF;
 }
+.page-content {
+	margin: 1em;
+	padding: 1em;
+	background: #fff;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	border-top: 4px solid #20A0FF;
+}
