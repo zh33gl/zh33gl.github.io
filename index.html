@@ -9,25 +9,21 @@
     <link rel="stylesheet" href="./css/index.css">
   </head>
   <body>
-    <header class="page-header">
-      <h1>git hub</h1>
-      <div class="page-menu">
-        <ul class="category">
-          <li>JavaScript</li>
-          <li>HTML</li>
-          <li>CSS</li>
-        </ul>
-        <ul class="category">
-          <li>JavaScript</li>
-          <li>HTML</li>
-          <li>CSS</li>
-        </ul>
-      </div>
-      <div class="copyright">zhgl</div>
-    </header>
-    <main class="page-body">
-      <div style="height:2000px;">content</div>
-    </main>
-    <footer class="page-footer"></footer>    
+    <div id="app" class="flex">
+      <header class="page-header">
+        <h1>git hub</h1>
+        <div>
+          <ul class="category">
+            <li v-for="cate in categories" class="seti" :class="cate.cls" :data-href="cate.href" @click="openCategory">
+              {{cate.title}}
+            </li>
+          </ul>
+        </div>
+        <div class="copyright">&copy; zhgl</div>
+      </header>
+      <main class="page-body"></main>
+    </div>
+    <script src="http://cdn.bootcss.com/vue/2.0.1/vue.min.js"></script>
+    <script src="./js/index.js"></script>
   </body>
 </html>

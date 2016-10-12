@@ -26,7 +26,40 @@
 	background: #8d8d8d;
 	transition: .5s ease-out;
 }
-
+@font-face {
+    font-family: 'seti';
+    src: url('../fonts/seti.woff') format('woff');
+}
+.seti:before{
+	color: transparent;
+	content: '\1d';
+	font: normal 24px/1em seti;
+	vertical-align: text-top;
+}
+.seti.js:before {
+	color: #519aba;
+    content: '\E032';
+}
+.seti.nodejs:before {
+	color: #8dc149;
+    content: '\E032';
+}
+.seti.html:before {
+	color: #e37933;
+    content: '\E029';
+}
+.seti.css:before {
+	color: #6d8086;
+    content: '\E010';
+}
+.seti.ui:before {
+    color: #cbcb41;
+	content: '\E02C';
+}
+.seti.csharp:before {
+	color: #cc3e44;
+	content: '\E004'
+}
 * {
 	margin: 0;
 	padding: 0;
@@ -43,3 +76,4 @@ body {
 	background: #eee;
 	font: normal 16px/1.5em 'Microsoft YaHei', Arial;
 }
+a {text-decoration: none;}
