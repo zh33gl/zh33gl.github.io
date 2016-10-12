@@ -1,0 +1,32 @@
+body {
+	display: flex;
+}
+.page-header {
+	flex: 0 0 15rem;
+	color: #F9FAFC;
+	background: #1F2D3D;
+
+	display: flex;
+	flex-direction: column;
+    justify-content: space-between;
+}
+.page-header h1 {
+	margin: 2rem 0 3rem 0;
+	font-size: 2rem;
+	line-height: 1em;
+	text-align: center;
+}
+.page-header .page-menu{
+	flex: 1 1 auto;
+}
+.page-body {
+	flex: 1 1 auto;
+	overflow: auto;
+}
+.page-footer {
+	flex: 0 0 0;
+}
+.copyright {
+	text-align: center;
+	line-height: 3em;
+}
