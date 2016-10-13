@@ -34,7 +34,12 @@ let vm = new Vue({
 		openCategory: function(e){
 			let target = e.target,
 				href = target.dataset.href;
-			vm.content = href;
+			this.$http.get('https://api.mlab.com/api/1/databases/blogs/collections/categories?apiKey=DgJNWWsp8hW5AirXH6q6APHu_rRkLIbM').then(function(res){
+				console.log(res)
+				vm.content = res.data;
+			}).catch(function(err){
+				console.error(err);
+			});
 		}
 	}
 });
