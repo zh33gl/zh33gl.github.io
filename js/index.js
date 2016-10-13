@@ -32,14 +32,18 @@ let vm = new Vue({
 	},
 	methods: {
 		openCategory: function(e){
-			let target = e.target,
-				href = target.dataset.href;
-			this.$http.get('https://api.mlab.com/api/1/databases/blogs/collections/categories?apiKey=DgJNWWsp8hW5AirXH6q6APHu_rRkLIbM').then(function(res){
-				console.log(res)
-				vm.content = res.data;
-			}).catch(function(err){
-				console.error(err);
-			});
+			let target = e.target || e.srcElement;
+			if(target.tagName.toLowerCase() !== 'li'){
+				return;
+			}
+			target = target.dataset.href;
+			//	href = target.dataset.href;
+			// this.$http.get('https://api.mlab.com/api/1/databases/blogs/collections/categories?apiKey=DgJNWWsp8hW5AirXH6q6APHu_rRkLIbM').then(function(res){
+			// 	console.log(res)
+			// 	vm.content = res.data;
+			// }).catch(function(err){
+			// 	console.error(err);
+			// });
 		}
 	}
 });

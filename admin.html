@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>My blog</title>
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/admin.css">
+	<title>Admin - My blog</title>
+</head>
+<body>
+	<div id="app" class="page">
+		<header class="page-header">
+			<h1>My blog</h1>
+		</header>
+		<main class="page-body">
+
+			<div class="tabs">
+				<ul class="tabs-header" @click.stop="toggleTab">
+					<li :class="['tabs-tab', {'active': selectedView == tab.view}]" v-for="(tab, idx) in tabs" :data-view="tab.view">{{tab.title}}</li>
+				</ul>
+				<div class="tabs-body">
+					<component :is="selectedView" keep-alive></component>
+				</div>
+			</div>
+		</main>
+		<footer class="page-footer">
+			footer
+		</footer>
+	</div>
+
+	<template id="tpl_category">
+		<div>
+			<table>
+				<thead>
+					<tr>
+						<th>名称</th><th>图标</th><th>备注</th><th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="(row, idx) in rows">
+						<td>{{row.name}}</td>
+						<td>{{row.cls}}</td>
+						<td>{{row.desc}}</td>
+						<td class="action" @click="doAction(idx, $event)">
+							<button data-action="edit">编辑</button>
+							<button data-action="del">删除</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div style="text-align:center">
+				<button @click="doAction(null, $event)">增加</button>
+			</div>
+		</div>
+
+	</template>
+	<template id="tpl_tag">
+		<div>
+			wo is tag
+		</div>
+	</template>
+	<template id="tpl_article">
+		<div>
+			wo is article
+		</div>
+	</template>
+    <script src="https://cdn.bootcss.com/vue/2.0.1/vue.js"></script>
+    <script src="https://cdn.bootcss.com/vue-resource/1.0.3/vue-resource.min.js"></script>
+    <script type="text" src="./js/admin.js"></script>
+	<script>
+		'use strict';
+		var webApi = function(uri, method, opts){
+			if(!uri){
+				return;
+			}
+			method = (method || 'get').toLowerCase();
+			let req = Vue.http,
+				url = 'https://api.mlab.com/api/1/databases/blogs/collections/{uri}?apiKey=DgJNWWsp8hW5AirXH6q6APHu_rRkLIbM'.replace('{uri}', uri);
+			switch(method){
+				case 'post':
+					if(!opts.body){
+						return;
+					}
+					return req.post(url, JSON.stringify(opts.body));
+				default:
+					return req.get(url);
+			}
+		}
+		var com_category = {
+			template: '#tpl_category',
+			data: function(){
+				return {
+					mode: 0,
+					rows: []
+				}
+			},
+			methods: {
+				doAction: function(idx, e){
+					console.log(idx, e)
+					let me = this;
+					if(idx === null){
+						webApi('categories', 'post', {body: {name: new Date(), cls:'html', desc:'html5'}}).then(function(res){
+							me.rows.push(res.data);
+						}).catch(function(err){
+							console.error(err);
+						});
+						return;
+					}
+					let target = e.target || e.srcElement,
+						action = target.dataset['action'];
+					if(!action){
+						return;
+					}
+					let item = JSON.parse(JSON.stringify(me.rows[idx]));
+					switch(action){
+						case 'edit':
+							item.name += item.name;
+						break;
+					}
+						 
+					console.log(action, idx, me.rows[idx])
+				}
+			},
+			mounted: function(){
+				if(this.rows.length < 1){
+					let me = this;
+					webApi('categories', 'get').then(function(res){
+						me.rows = res.data;
+					}).catch(function(err){
+						alert('error', err);
+					});
+					//this.rows = [{_id: {$oid: 1}, name: 'js', cls: 'js', desc: 'javascript'}];
+				}
+			}
+		};
+		var com_tag = {
+			template: '#tpl_tag'
+		};
+		var com_article = {
+			template: '#tpl_article'
+		};
+
+		var vm = new Vue({
+			el: '#app',
+			data: {
+				tabs: [{
+					title: '分类管理',
+					view: 'com_category'
+				}, {
+					title: '标签管理',
+					view: 'com_tag'
+				}, {
+					title: '文章管理',
+					view: 'com_article'
+				}],
+				selectedView: 'com_category'
+			},
+			components: {
+				'com_category': com_category,
+				'com_tag': com_tag,
+				'com_article': com_article
+			},
+			methods: {
+				toggleTab: function(e){
+					let target = e.target;
+					if(!target.classList.contains('tabs-tab')){
+						return;
+					}
+					target = target.dataset.view;
+					if(target === this.selectedView){
+						return;
+					}
+					this.selectedView = target;
+					console.log()
+				}
+			}
+		});
+		/*
+		var vm = new Vue({
+			el: '#app',
+			data: {
+				tabsSelected: 0,
+				dsCategority: [],
+				dsTag: [],
+				dsArticle: []
+			},
+			methods: {
+				toggleTab: function(e){
+					var target = e.target || e.srcElement;
+					if(target.tagName.toLowerCase() !== 'li'){
+						return;
+					}
+					var idx = (target.dataset ? target.dataset.idx : target.getAttribute('data-idx')) | 0;
+					this.tabsSelected = idx;
+					if(idx === 0){
+						this.$http.get('https://api.mlab.com/api/1/databases/blogs/collections/categories?apiKey=DgJNWWsp8hW5AirXH6q6APHu_rRkLIbM').then(function(res){
+							var data = res.data;
+							vm.dsCategority = data;
+						}).catch(function(err){
+							console.error(err);
+						});
+					}
+				}
+			}
+		});
+		*/
+	</script>
+</body>
+</html>
