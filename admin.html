@@ -4,34 +4,32 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <title>My blog</title>
+	<title>Admin - Vue Demo</title>
     <link rel="stylesheet" href="./css/common.css">
     <link rel="stylesheet" href="./css/admin.css">
-	<title>Admin - My blog</title>
 </head>
 <body>
-	<div id="app" class="page">
-		<header class="page-header">
-			<h1>My blog</h1>
+	<div id="app" class="flex flex-row page">
+		<header class="flex flex-middle page-header">
+			<h1>Vue Demo</h1>
 		</header>
-		<main class="page-body">
-
-			<div class="tabs">
+		<main class="flex-fill flex page-body">
+			<div class="flex flex-row tabs">
 				<ul class="tabs-header" @click.stop="toggleTab">
 					<li :class="['tabs-tab', {'active': selectedView == tab.view}]" v-for="(tab, idx) in tabs" :data-view="tab.view">{{tab.title}}</li>
 				</ul>
-				<div class="tabs-body">
+				<div class="flex-fill tabs-body">
 					<component :is="selectedView" keep-alive></component>
 				</div>
 			</div>
 		</main>
-		<footer class="page-footer">
+		<footer class="flex flex-middle flex-center page-footer">
 			footer
 		</footer>
 	</div>
 
-	<template id="tpl_category">
-		<div>
+	<template id="grid_category">
+		<div class="data-grid">
 			<table>
 				<thead>
 					<tr>
@@ -44,17 +42,45 @@
 						<td>{{row.cls}}</td>
 						<td>{{row.desc}}</td>
 						<td class="action" @click="doAction(idx, $event)">
-							<button data-action="edit">编辑</button>
-							<button data-action="del">删除</button>
+							<button class="text" data-action="update">编辑</button>
+							<button class="text" data-action="delete">删除</button>
 						</td>
 					</tr>
 				</tbody>
 			</table>
-			<div style="text-align:center">
-				<button @click="doAction(null, $event)">增加</button>
+			<div class="toolbar">
+				<button class="primary" style="padding: auto 5em;" @click="onCreate">新建</button>
 			</div>
+			<com-category-editor ref="editor" :mode="mode" :title="title" :item="item" @save="onSave"></com-category-editor>
 		</div>
-
+	</template>
+	<template id="editor_category">
+		<dialog>
+			<form @submit.prevent="onSubmit">
+				<header class="dialog-header">
+					<span class="dialog-title">{{ title }}</span>
+					<button type="button" class="dialog-close" @click="onClose">X</button>
+				</header>
+				<section class="dialog-body">
+					<div>
+						<label class="title">名称</label>
+						<input type="text" required v-model="item.name">
+					</div>
+					<div>
+						<label class="title">图标</label>
+						<input type="text" required v-model="item.cls">
+					</div>
+					<div>
+						<label class="title">备注</label>
+						<input type="text" required v-model="item.desc">
+					</div>
+				</section>
+				<footer class="dialog-footer">
+					<button type="submit" class="primary">确定</button>
+					<button type="button" @click="onClose">取消</a>
+				</footer>
+			</form>
+		</div>
 	</template>
 	<template id="tpl_tag">
 		<div>
@@ -66,8 +92,11 @@
 			wo is article
 		</div>
 	</template>
-    <script src="https://cdn.bootcss.com/vue/2.0.1/vue.js"></script>
-    <script src="https://cdn.bootcss.com/vue-resource/1.0.3/vue-resource.min.js"></script>
+
+	<script src="./js/thirdparty/vue.js"></script>
+	<script src="./js/thirdparty/vue-resource.js"></script>
+    <!--<script src="https://cdn.bootcss.com/vue/2.0.1/vue.js"></script>
+    <script src="https://cdn.bootcss.com/vue-resource/1.0.3/vue-resource.min.js"></script>-->
     <script type="text" src="./js/admin.js"></script>
 	<script>
 		'use strict';
@@ -88,12 +117,16 @@
 					return req.get(url);
 			}
 		}
-		var com_category = {
-			template: '#tpl_category',
+		var categories = [],
+			com_category = {
+			template: '#grid_category',
 			data: function(){
 				return {
 					mode: 0,
-					rows: []
+					title: '',
+					item: {},
+
+					rows: categories
 				}
 			},
 			methods: {
@@ -121,9 +154,20 @@
 					}
 						 
 					console.log(action, idx, me.rows[idx])
+				},
+				onCreate: function(){
+					this.mode = 1;
+					this.title = '新建';
+					this.item = {};
+					this.$refs.editor.onOpen();
+				},
+				onSave: function(){
+					this.rows.push(this.item);
+					this.$refs.editor.onClose();
 				}
 			},
 			mounted: function(){
+				return;
 				if(this.rows.length < 1){
 					let me = this;
 					webApi('categories', 'get').then(function(res){
@@ -132,6 +176,26 @@
 						alert('error', err);
 					});
 					//this.rows = [{_id: {$oid: 1}, name: 'js', cls: 'js', desc: 'javascript'}];
+				}
+			},
+			components: {
+				'com-category-editor': {
+					template: '#editor_category',
+					data: function(){
+						return { show: false }
+					},
+					props: ['open', 'mode', 'title', 'item'],
+					methods: {
+						onOpen: function(){
+							this.$el.showModal();
+						},
+						onClose: function(){
+							this.$el.close();
+						},
+						onSubmit: function(){
+							this.$emit('save');
+						}
+					}
 				}
 			}
 		};
@@ -147,20 +211,20 @@
 			data: {
 				tabs: [{
 					title: '分类管理',
-					view: 'com_category'
+					view: 'com-category'
 				}, {
 					title: '标签管理',
-					view: 'com_tag'
+					view: 'com-tag'
 				}, {
 					title: '文章管理',
-					view: 'com_article'
+					view: 'com-article'
 				}],
-				selectedView: 'com_category'
+				selectedView: 'com-category'
 			},
 			components: {
-				'com_category': com_category,
-				'com_tag': com_tag,
-				'com_article': com_article
+				'com-category': com_category,
+				'com-tag': com_tag,
+				'com-article': com_article
 			},
 			methods: {
 				toggleTab: function(e){

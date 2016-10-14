@@ -2,29 +2,25 @@
 	width: 8px!important;
 	height: 8px;
 }
-
 ::-webkit-scrollbar-track {
 	background: transparent;
 }
 
 ::-webkit-scrollbar-track:hover {
-	background: transparent;
+	
 }
 
 ::-webkit-scrollbar-thumb {
 	border-radius: 4px;
 	background: #bcbcbc;
-	transition: .5s ease-out;
 }
 
 ::-webkit-scrollbar-thumb:hover {
 	background: #a9a9a9;
-	transition: .5s ease-out;
 }
 
 ::-webkit-scrollbar-thumb:active {
 	background: #8d8d8d;
-	transition: .5s ease-out;
 }
 @font-face {
     font-family: 'seti';
@@ -66,6 +62,7 @@
 	list-style: none;
 	outline: none;
 	box-sizing: border-box;
+	font: normal 16px/1.5em 'Microsoft YaHei', Arial;
 }
 
 html,
@@ -74,6 +71,78 @@ body {
 	height: 100%;
 	color: #333;
 	background: #eee;
-	font: normal 16px/1.5em 'Microsoft YaHei', Arial;
+		
 }
+h1 {font-size: 2rem;}
 a {text-decoration: none;}
+button {
+    display: inline-block;
+    line-height: 1em;
+    white-space: nowrap;
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid #c0ccda;
+    color: #1f2d3d;
+    text-align: center;
+    padding: .5em 1em;
+    border-radius: 4px;
+	transition: .4s ease-out;
+}
+
+button:hover {
+    color: #20a0ff;
+    border-color: currentColor;
+}
+
+button:active {
+    color: #1d90e6;
+    border-color: currentColor;
+}
+button.text {
+    border: none;
+    color: #20a0ff;
+    background: transparent;
+}
+
+button.text:hover {
+    color: #4db3ff
+}
+
+button.text:active {
+    color: #1d90e6
+}
+button.primary{
+	color: #fff;
+    background-color: #20a0ff;
+    border-color: #20a0ff;
+}
+button.primary:hover {
+	color: #fff;
+    background: #4db3ff;
+    border-color: #4db3ff;
+}
+button:disabled, button:disabled:hover {
+	color: #c0ccda;
+    cursor: not-allowed;
+    background-color: #eff2f7;
+    border-color: #d3dce6
+}
+table {width:100%; border:0; border-collapse: collapse;}
+thead {background: #eee linear-gradient(to bottom, #eee, #e8e8e8, #eee);}
+th, td {border:1px solid #ddd;  line-height:2em; padding: 0 .5em;}
+
+dialog {
+	top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+	border: 1px solid #ccc;
+}
+dialog::backdrop{
+	
+}
+
+.flex {display: flex;}
+.flex-row {display: flex; flex-direction: column;}
+.flex-middle {align-items: center; }
+.flex-center {justify-content: center; }
+.flex-fill {flex: 1 1 0%;}
