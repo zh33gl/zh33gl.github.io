@@ -57,11 +57,11 @@
 	<template id="editor_category">
 		<dialog>
 			<form @submit.prevent="onSubmit">
-				<header class="dialog-header">
-					<span class="dialog-title">{{ title }}</span>
+				<header class="flex flex-middle dialog-header">
+					<span class="flex-fill dialog-title">{{ title }}</span>
 					<button type="button" class="dialog-close" @click="onClose">X</button>
 				</header>
-				<section class="dialog-body">
+				<section class="flex-fill dialog-body">
 					<div>
 						<label class="title">名称</label>
 						<input type="text" required v-model="item.name">

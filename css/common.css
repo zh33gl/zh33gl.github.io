@@ -127,6 +127,7 @@ button:disabled, button:disabled:hover {
     background-color: #eff2f7;
     border-color: #d3dce6
 }
+label.title {display:inline-block; width:30%; }
 table {width:100%; border:0; border-collapse: collapse;}
 thead {background: #eee linear-gradient(to bottom, #eee, #e8e8e8, #eee);}
 th, td {border:1px solid #ddd;  line-height:2em; padding: 0 .5em;}
@@ -136,6 +137,19 @@ dialog {
     left: 50%;
     transform: translate(-50%, -50%);
 	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+.dialog-header {
+	background: #ccc;
+}
+.dialog-title {font-size:1.05em; line-height:2em; text-indent:.5em;}
+.dialog-close {border-radius: 100%; background:transparent; padding:0; width:1.5rem; height:1.5rem;}
+.dialog-body {
+
+}
+.dialog-footer {
+	text-align: center;
+	padding: .5rem 0;
 }
 dialog::backdrop{
 	
