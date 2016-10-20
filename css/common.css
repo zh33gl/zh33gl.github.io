@@ -17,6 +17,7 @@
 
 ::-webkit-scrollbar-thumb:hover {
 	background: #a9a9a9;
+	display: block;
 }
 
 ::-webkit-scrollbar-thumb:active {
@@ -87,6 +88,8 @@ button {
     padding: .5em 1em;
     border-radius: 4px;
 	transition: .4s ease-out;
+	-webkit-user-select: none;
+	user-select: none;
 }
 
 button:hover {
@@ -154,6 +157,9 @@ dialog {
 dialog::backdrop{
 	
 }
+
+tbody tr:nth-child(even) {background: #f4f4f4}
+tbody tr:hover {background: #eee;}
 
 .flex {display: flex;}
 .flex-row {display: flex; flex-direction: column;}
